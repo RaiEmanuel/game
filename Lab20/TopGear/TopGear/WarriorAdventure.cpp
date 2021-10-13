@@ -13,6 +13,7 @@
 #include "WarriorAdventure.h"
 //#include "Stripes.h"
 #include "Player.h"
+#include "block.h"
 //#include "Cars.h"
 
 // ------------------------------------------------------------------------------
@@ -27,6 +28,52 @@ void WarriorAdventure::Init()
 {
     // cria gerenciadores
     scene = new Scene();
+    background = new Background();
+    player = new Player();
+    /* criação dos blocos pelo .txt block-position */
+    fin.open("Resources/block-position.txt", std::ios_base::in);
+    if (!fin.is_open()) {
+        //return EXIT_FAILURE;
+        //erro na leitura
+    }
+    int numBlocks; //número de blocos a serem lidos
+    float posX; //posição x do bloco
+    char typeBlock = 'M';//tipo do bloco
+    stringstream ss;
+    fin >> numBlocks;
+    ss << "xxxxxxxxxxxxxxx lidos y blocos = " << numBlocks<<std::endl;
+    OutputDebugString(ss.str().c_str());
+    ppBlock = new Block *[numBlocks];
+    for (int i = 0; i < numBlocks; ++i) {
+        fin >> posX >> typeBlock;
+        //enum TypeBlock { UNIQUE, TWO, SMALL, MEDIUM, LARGE };
+        switch (typeBlock) {
+        case 'U':
+            ppBlock[i] = new Block(UNIQUE, posX);
+            break;
+        case 'T':
+            ppBlock[i] = new Block(TWO, posX);
+            break;
+        case 'S':
+            ppBlock[i] = new Block(SMALL, posX);
+            break;
+        case 'M':
+            ppBlock[i] = new Block(MEDIUM, posX);
+            break;
+        case 'L':
+            ppBlock[i] = new Block(LARGE, posX);
+            break;
+        }
+        scene->Add(ppBlock[i], STATIC);//objeto deletado pela cena, apenos o ppBlock deletar manualmente
+    }
+
+    fin.close();
+    //adição na cena
+    scene->Add(background, STATIC);
+    scene->Add(player, MOVING);
+    
+    
+    
     //audio = new Audio();
 
     // carregar músicas e efeitos sonoros
@@ -65,12 +112,13 @@ void WarriorAdventure::Update()
         window->Close();
 
     // atualiza a cena 
-    scene->Update();
     scene->CollisionDetection();
+    scene->Update();
+    
 
     // habilita/desabilita bounding box
-    if (window->KeyPress('B'))
-        viewBBox = !viewBBox;
+    //if (window->KeyPress('B'))
+        //viewBBox = !viewBBox;
 }
 
 // ------------------------------------------------------------------------------
@@ -97,6 +145,9 @@ void WarriorAdventure::Finalize()
     delete sky;
     delete scene;
     delete audio;*/
+    //delete ppBlock;
+    delete scene;
+    //delete ppBlock;
 }
 
 

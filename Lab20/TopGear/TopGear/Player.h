@@ -1,16 +1,5 @@
-/**********************************************************************************
-// Player (Arquivo de Cabeçalho)
-// 
-// Criação:     12 Jul 2019
-// Atualização: 06 Out 2021
-// Compilador:  Visual C++ 2019
-//
-// Descrição:   O carro do jogador
-//
-**********************************************************************************/
-
-#ifndef _TOPGEAR_PLAYER_H_
-#define _TOPGEAR_PLAYER_H_
+#ifndef _PLAYER_H_
+#define _PLAYER_H_
 
 // ---------------------------------------------------------------------------------
 
@@ -24,25 +13,32 @@ using std::stringstream;
 
 // ---------------------------------------------------------------------------------
 
-enum Direction { STRAIGHT, LEFT, RIGHT };
+enum StatePlayer { IDLE, RUN, ATTACK, JUMP, FALL };
 
 // ---------------------------------------------------------------------------------
 
 class Player : public Object
 {
 private:
-    TileSet * carSet;           // folha de sprites do carro
-    Animation * carAni;         // animação do carro
-    Font * speedFont;           // fonte para exibir a velocidade
-    float & speed;              // velocidade do carro
+    TileSet * playerSet;           // folha de sprites do carro
+    Animation * playerAni;         // animação do carro
+    //Font * speedFont;           // fonte para exibir a velocidade
+    float speedX = 300.0f;              // velocidade do carro
+    float speedY = 0.0f;              // velocidade do carro
     stringstream text;          // exibição de texto
-
+    Timer timerJump;            //controla tempo do pulo
+    bool releaseTimerJump = false; //controla liberação do timer do pulo, true significa que pode disparar pulo
+    float initYJump = 0.0f;
+    bool onBlock = false; //verifica se está num bloco na iteração
+    StatePlayer statePlayer = FALL;
+    const float gravity = 50.0f;
 public:
     Player();                   // construtor
     ~Player();                  // destrutor
 
     void Update();              // atualiza estado do objeto
     void Draw();                // desenha objeto
+    void OnCollision(Object * obj);                // colisões do objeto
 }; 
 
 // ---------------------------------------------------------------------------------
