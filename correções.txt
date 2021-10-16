@@ -1,0 +1,2 @@
+-ajustar contador de ninjas statis do jogo principal
+-deletar ninjas quando saem da cena

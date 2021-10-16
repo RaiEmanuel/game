@@ -1,0 +1,3 @@
+﻿  WarriorAdventure.cpp
+C:\Users\rai_e\Desktop\game\WarriorAdventure\TopGear\TopGear\WarriorAdventure.cpp(149,56): warning C4244: 'argumento': conversão de 'int' para 'float', possível perda de dados
+  TopGear.vcxproj -> C:\Users\rai_e\Desktop\game\WarriorAdventure\TopGear\Debug\TopGear.exe
