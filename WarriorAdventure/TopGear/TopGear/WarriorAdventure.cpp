@@ -22,6 +22,8 @@
 // inicialização de membros estáticos da classe
 
 Audio* WarriorAdventure::audio = nullptr;
+Scene* WarriorAdventure::scene = nullptr;
+list<Tiro_aviao*> WarriorAdventure::engineList;
 //float   TopGear::speed = 1000.0f;
 
 // ------------------------------------------------------------------------------
@@ -41,6 +43,10 @@ void WarriorAdventure::Init()
     //ninja = new Ninja(560);
     //ninja2 = new Ninja(700);
     
+    airplane = new Airplane();
+    scene->Add(airplane,STATIC);
+
+
     /* criação dos blocos pelo .txt block-position */
     fin.open("Resources/block-position.txt", std::ios_base::in);
     if (!fin.is_open()) {
@@ -53,8 +59,8 @@ void WarriorAdventure::Init()
     char typeBlock = 'M';//tipo do bloco
     stringstream ss;
     fin >> numBlocks;
-    ss << "xxxxxxxxxxxxxxx lidos y blocos = " << numBlocks<<std::endl;
-    OutputDebugString(ss.str().c_str());
+    //ss << "xxxxxxxxxxxxxxx lidos y blocos = " << numBlocks<<std::endl;
+    //OutputDebugString(ss.str().c_str());
     ppBlock = new Block *[numBlocks];
     for (int i = 0; i < numBlocks; ++i) {
         fin >> posX >> posY >> typeBlock;
@@ -145,8 +151,8 @@ void WarriorAdventure::Update()
         }
     }
 
-    if (timerLandNewNinja.Elapsed(3)) {//3s lança novo ninja em posição aleatória da tela
-        Ninja* ninja = new Ninja(rand()%window->Width()+ window->Width());
+    if (timerLandNewNinja.Elapsed(5)) {//3s lança novo ninja em posição aleatória da tela
+        Ninja* ninja = new Ninja(float(rand()%window->Width()+ window->Width()));
         scene->Add(ninja, MOVING);
         ninjaList.push_back(ninja);
         timerLandNewNinja.Reset();
@@ -171,6 +177,14 @@ void WarriorAdventure::Update()
         }
         else ++i;
     }
+
+    for (auto i = engineList.begin(); i != engineList.end();++i) {
+        OutputDebugString("girooooooo");
+        (*i)->Rotate(5.0f);
+        player->Rotate(0.1f);
+        player->Draw();
+    }
+
 
     // habilita/desabilita bounding box
     //if (window->KeyPress('B'))

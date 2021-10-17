@@ -17,19 +17,25 @@
 #include "kunai.h"
 #include <fstream>
 #include <list>
+#include "Airplane.h"
+#include "Tiro_aviao.h"
 
 // ------------------------------------------------------------------------------
 
 enum SoundIds { MUSIC, ENGINE, COLLISION };//continuar
-enum ObjectTypes {PLAYER, BLOCK, ZOOMBIE, NINJA, AIRPLANE, KUNAI};
+enum ObjectTypes {PLAYER, BLOCK, ZOOMBIE, NINJA, AIRPLANE, KUNAI,TIRO_AVIAO};
 // ------------------------------------------------------------------------------
 
 class WarriorAdventure : public Game
 {
+
+public: static Scene* scene;          // gerenciador de cena
+
 private:
-    Scene* scene = nullptr;            // gerenciador de cena
+    
     Background * background = nullptr;
     Player * player = nullptr;
+    Airplane* airplane = nullptr;
     /* vetor após testes */
     /* Lista de Kunais para saber quais saíram da tela, isExit, e deletar pelo delete(* obj, static) da cena*/
     /* a cena quem irá dar delete, então remove-se dessa lista para evitar acesso indevido na próxima iteração*/
@@ -45,6 +51,7 @@ private:
     Block **  ppBlock = nullptr;//ponteiro de ponteiro porque a engina não aceita vetores, mas apenas objetos únicos. 
     //Os ponteiros desse ppBlock vão ser colocados na cena como objetos normais para ela deletar quando adequado. 
     //ppBlock fica a cargo do programador. LEMBRAR DE DELETAR NO FIM.
+    
     std::ifstream fin;
     
     //Sprite* sky = nullptr;             // desenho do céu
@@ -55,7 +62,7 @@ private:
 public:
     static Audio* audio;               // gerenciador de áudio
     //static float speed;                 // velocidade do carro
-
+    static list<Tiro_aviao*> engineList;
     void Init();                        // inicialização
     void Update();                      // atualização
     void Draw();                        // desenho

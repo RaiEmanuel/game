@@ -62,7 +62,7 @@ void Player::Update()
     /* pulo */
     if (window->KeyPress(VK_SPACE) && statePlayer == StatePlayer::RUN) {// 
         //speedY = -100.0f;
-         OutputDebugString(c.str().c_str());
+       //  OutputDebugString(c.str().c_str());
         //releaseTimerJump = false;
         //timerJump.Start();
         statePlayer = StatePlayer::JUMP;
@@ -72,7 +72,7 @@ void Player::Update()
         //timerJump.Start();
     }
     c << "speeeeedy " << speedY << std::endl;
-    OutputDebugString(c.str().c_str());
+    //OutputDebugString(c.str().c_str());
     stringstream ss;
     
     //primeira execução do pulo o onBlock ainda é true, garante primeiro deslocamento com velocidade Y definida no pulo
@@ -226,7 +226,7 @@ void Player::OnCollision(Object * obj)
         // 0     1     2      3     4
         //IDLE, RUN, ATTACK, JUMP, FALL
         if (statePlayer != StatePlayer::JUMP) {
-            OutputDebugString(ss.str().c_str());
+            //OutputDebugString(ss.str().c_str());
             //ss << "=================== colidindoooooo "<< Y() + float(playerSet->TileHeight()) / 2.0f - (block->Y() - 40.0f)<<", "<< speedY * gameTime << std::endl;
             //OutputDebugString(ss.str().c_str());
             //ss << "===================== diferença " << Y() + playerSet->TileHeight() / 2.0f - (block->Y() - 40.0f) << std::endl;
