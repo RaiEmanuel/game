@@ -33,7 +33,7 @@ private:
     /* vetor após testes */
     /* Lista de Kunais para saber quais saíram da tela, isExit, e deletar pelo delete(* obj, static) da cena*/
     /* a cena quem irá dar delete, então remove-se dessa lista para evitar acesso indevido na próxima iteração*/
-    uint quantityNinjas = 1;//quantidade de ninjas
+    uint quantityNinjas = 0;//quantidade de ninjas
     Timer timerLandNewNinja;
     list<Ninja*> ninjaList;
     /* vetor após testes */

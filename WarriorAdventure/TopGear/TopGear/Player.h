@@ -23,7 +23,7 @@ private:
     bool died = false;
     bool onBlock = false; //verifica se está num bloco na iteração
     Player::StatePlayer statePlayer = StatePlayer::FALL;
-    const float gravity = 50.0f;//gravidade que fica puxando player 100% do tempo para baixo
+    const float gravity = 20.0f;//gravidade que fica puxando player 100% do tempo para baixo
 public:
     Player();                   // construtor
     ~Player();                  // destrutor

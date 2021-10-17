@@ -51,53 +51,48 @@ Player::~Player()
 void Player::Update()
 {
     stringstream ssx;
-    ssx << "nova velocida x " << speedX << std::endl;
-   // OutputDebugString(ssx.str().c_str());
-    // acelera ou freia
-    //playerAni->Select(statePlayer);
-    if (!died) {
-        if (window->KeyDown(VK_RIGHT)) Translate(speedX * gameTime, 0.0f);
-        if (window->KeyDown(VK_LEFT)) Translate(-1.0f * speedX * gameTime, 0.0f);
-    }
-    else {
-        Translate(Block::speedX * gameTime, 0.0f);//ficar parado é andar na velocidade do chão
-    }
-    
+  
+    if (window->KeyDown(VK_RIGHT)) Translate(speedX * gameTime,0.0f);//deve ser 0 e não mudar no y
+    if (window->KeyDown(VK_LEFT)) Translate(-1.0f * speedX * gameTime, 0.0f);//deve ser 0 e não mudar no y
+   
 
+   stringstream c;
+   c << "on = " << onBlock << std::endl;
+       
     /* pulo */
-    if (window->KeyPress(VK_SPACE) && statePlayer == StatePlayer::RUN && onBlock) {
+    if (window->KeyPress(VK_SPACE) && statePlayer == StatePlayer::RUN) {// 
         //speedY = -100.0f;
+         OutputDebugString(c.str().c_str());
         //releaseTimerJump = false;
         //timerJump.Start();
         statePlayer = StatePlayer::JUMP;
         playerAni->Restart();
         playerAni->Select(static_cast<uint>(statePlayer));
-        speedY = -800.0f;
+        speedY = -500.0f;
         //timerJump.Start();
     }
+    c << "speeeeedy " << speedY << std::endl;
+    OutputDebugString(c.str().c_str());
     stringstream ss;
-    /*float gravity = 30.0f;
-    if (statePlayer == StatePlayer::JUMP){
-        if (timerJump.Elapsed() <= 0.2f) {
-            speedY -= gravity;
-        }
-        else {
-            timerJump.Stop();
-            //timerJump.Reset();
-            statePlayer = StatePlayer::FALL;
-            playerAni->Select(static_cast<uint>(statePlayer));
-        }
-    }
-    if (!onBlock && statePlayer != StatePlayer::JUMP) {
-        speedY += gravity;
-    }*/
     
     //primeira execução do pulo o onBlock ainda é true, garante primeiro deslocamento com velocidade Y definida no pulo
+    //--------------------------------------------------------------------
+    //não estando no bloco a gravidade age
     if(!onBlock) speedY += gravity;//gravidade age quando não está no bloco. Evitar excesso de soma e overfllow futuro
     Translate(0.0f, speedY * gameTime);
     onBlock = false;///precisa colidir para reativar
     //speedY == 0 no pulo quando atingiu o ápice da parábola e speedY > 0 quando está caindo
-    if (speedY >= 0 && statePlayer == StatePlayer::JUMP) statePlayer = StatePlayer::FALL;//está caindo já que velocidade positiva
+    //ss << "yyyyyyyyyyyyyyyy " << speedY << std::endl;
+
+    //----------------------------
+    //corrige para queda
+    if (speedY >= 0 && statePlayer == StatePlayer::JUMP) {
+        //ss << "set fall " << speedY << std::endl;
+        //OutputDebugString(ss.str().c_str());
+        statePlayer = StatePlayer::FALL;//está caindo já que velocidade positiva
+        playerAni->Restart();
+        playerAni->Select(static_cast<uint>(statePlayer));
+    }
     //OBS: cuidado no igual a zero porque no pico da parábola e no chão ambos a valocidade vale zero
     //sempre andando no y 
   
@@ -136,7 +131,7 @@ void Player::Update()
     if (statePlayer == StatePlayer::ATTACK) {
         stringstream s;
         s << "xxxxxxxxxxxxxxxxxxx atacooooou" << playerAni->Frame() << std::endl;
-        OutputDebugString(s.str().c_str());
+        //OutputDebugString(s.str().c_str());
         if (playerAni->Frame() == 29) {
             statePlayer = StatePlayer::RUN;
             playerAni->Restart();
@@ -224,43 +219,49 @@ void Player::OnCollision(Object * obj)
     if (obj->Type() == BLOCK) {
         Block* block = (Block*)obj;
         onBlock = true;
-            stringstream ss;
+        stringstream ss;
+        ss <<"xxxxxxxxxxxxxxxxx" << static_cast<uint>(statePlayer) << std::endl;
+        //1 - run
+        //3 - jump
+        // 0     1     2      3     4
+        //IDLE, RUN, ATTACK, JUMP, FALL
         if (statePlayer != StatePlayer::JUMP) {
-            //ss << "=================== colidindoooooo "<< Y() + float(playerSet->TileHeight()) / 2.0f - (block->Y() - 40.0f)<<", "<< speedY * gameTime << std::endl;
             OutputDebugString(ss.str().c_str());
+            //ss << "=================== colidindoooooo "<< Y() + float(playerSet->TileHeight()) / 2.0f - (block->Y() - 40.0f)<<", "<< speedY * gameTime << std::endl;
+            //OutputDebugString(ss.str().c_str());
             //ss << "===================== diferença " << Y() + playerSet->TileHeight() / 2.0f - (block->Y() - 40.0f) << std::endl;
             //OutputDebugString(ss.str().c_str());
             //+ 0.5 apenas por imprecisão do ponto flutuante. 
             //Trabalhar com comparação pura é trabalhar no limite em que qualquer "trepidação" pode influênciar negativamente
-            if (Y() + float(playerSet->TileHeight())/2.0f - (block->Y() - 40.0f) <= speedY * gameTime /*dist. máx permitida de percorrer */ + 0.5f) {//intervalo de confiança, depende da velocidade que está caindo.
+            if (Y() + float(playerSet->TileHeight())/2.0f - (block->Y() - 40.0f) <= speedY * gameTime /*dist. máx permitida de percorrer */ + 5.0f) {//intervalo de confiança, depende da velocidade que está caindo.
                 //quanto mais alto a queda, maior deve ser o intervalo porque velocidade maior entreria mais no bloco
                 //intervalo de aceitação.
                 //speedY * gameTime é o quanto o player percorreria se estivesse na superfície exata e estando a essa velocidade de queda.
                 //OBS: o == 0 do <= garante que quando velY == 0 o player não caia. A imprecisão intrínseca de ponto flutuante causa isso.
-                speedY = 0;
+                speedY = 0.0f;
+                onBlock = true;
                 //timerJump.Reset();
                 //statePlayer = StatePlayer::RUN;
                 if (statePlayer == StatePlayer::FALL) {
                     statePlayer = StatePlayer::RUN;
+                    playerAni->Restart();
                     playerAni->Select(static_cast<uint>(statePlayer));
                 }
                 MoveTo(X(), block->Y() - 40.0f - float(playerSet->TileHeight()) / 2.0f);
-                onBlock = true;
-            }
-            else {
+            }else {
                 onBlock = false;
             }
         }
     }
-    if (obj->Type() == KUNAI) {
-        stringstream ss;
-        ss << "tipoooooo " << obj->Type() << std::endl;
-        OutputDebugString(ss.str().c_str());
+    //if (obj->Type() == KUNAI) {
+       // stringstream ss;
+        //ss << "tipoooooo " << obj->Type() << std::endl;
+        //OutputDebugString(ss.str().c_str());
         //speedX = Block::speedX;
-        died = true;
-        statePlayer = StatePlayer::IDLE;
-        playerAni->Select(static_cast<uint>(statePlayer));
-    }
+        //died = true;
+       // statePlayer = StatePlayer::IDLE;
+       // playerAni->Select(static_cast<uint>(statePlayer));
+   // }
     // desenha velocidade
     /*text.str("");
     text.width(3);

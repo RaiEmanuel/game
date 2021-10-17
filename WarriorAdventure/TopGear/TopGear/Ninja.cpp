@@ -138,8 +138,8 @@ void Ninja::OnCollision(Object* obj)
                 onBlock = false;
             }
             stringstream g;
-            g << std::boolalpha << "status no bloco === " << onBlock << ",,,, " << speedX <<std::endl;
-            OutputDebugString(g.str().c_str());
+            //g << std::boolalpha << "status no bloco === " << onBlock << ",,,, " << speedX <<std::endl;
+            //OutputDebugString(g.str().c_str());
             //não está no bloco e não está caindo em ocsião normal, então precisa voltar pro bloco
             if (!onBlock && stateNinja != StateNinja::FALL && stateNinja != StateNinja::FALLATTACK && stateNinja != StateNinja::LAND) {
                 speedX *= -1;
