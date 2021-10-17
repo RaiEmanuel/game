@@ -1,34 +1,18 @@
-/**********************************************************************************
-// TopGear (Código Fonte)
-//
-// Criação:     11 Jul 2019
-// Atualização: 06 Out 2021
-// Compilador:  Visual C++ 2019
-//
-// Descrição:   Uso da escala em um jogo estilo TopGear
-//
-**********************************************************************************/
-
 #include "Engine.h"
 #include "WarriorAdventure.h"
-//#include "Stripes.h"
 #include "Player.h"
 #include "block.h"
 #include <stdlib.h>
-
-//#include "Cars.h"
-
 // ------------------------------------------------------------------------------
 // inicialização de membros estáticos da classe
 
 Audio* WarriorAdventure::audio = nullptr;
 Scene* WarriorAdventure::scene = nullptr;
 list<Tiro_aviao*> WarriorAdventure::engineList;
-//float   TopGear::speed = 1000.0f;
+list<Wind*> WarriorAdventure::windList;
 
 // ------------------------------------------------------------------------------
 float Block::speedX = -100.0f;
-//float Block::speedX = 0.0f;
 void WarriorAdventure::Init()
 {
     // cria gerenciadores
@@ -93,8 +77,6 @@ void WarriorAdventure::Init()
     //scene->Add(ninja2, MOVING);
     //scene->Add(kunai, STATIC);
     
-    
-    
     audio = new Audio();
 
     // carregar músicas e efeitos sonoros
@@ -151,21 +133,23 @@ void WarriorAdventure::Update()
         }
     }
 
-    if (timerLandNewNinja.Elapsed(5)) {//3s lança novo ninja em posição aleatória da tela
+    if (timerLandNewNinja.Elapsed(4)) {//4s lança novo ninja em posição aleatória da tela
         Ninja* ninja = new Ninja(float(rand()%window->Width()+ window->Width()));
         scene->Add(ninja, MOVING);
         ninjaList.push_back(ninja);
         timerLandNewNinja.Reset();
-
     }
+    /* XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX */
+    /* OBSS: OTIMIZAR O FOR COMPONENTIZANDO EM FUNÇÃO GENÉRICA  */
     
-
+    
     /* Percorre para saber quais kunais saíram da tela e precisam ser deletadas */
     stringstream ss;
     ss << "tamanho = " <<kunaisList.size() << std::endl;
+    OutputDebugString(ss.str().c_str());
     for (auto i = kunaisList.begin(); i != kunaisList.end();) {
-        ss << "saiu kunai? " << (*i)->isExit << std::boolalpha << std::endl;
-        //OutputDebugString(ss.str().c_str());
+        //ss << "saiu kunai? " << (*i)->isExit << std::boolalpha << std::endl;
+        
         //if (kunai->isExit) 
         //deleta da lista também agora para evitar acesso indevido
         //---------------------------------------------------------------------------
@@ -178,13 +162,51 @@ void WarriorAdventure::Update()
         else ++i;
     }
 
-    for (auto i = engineList.begin(); i != engineList.end();++i) {
-        OutputDebugString("girooooooo");
-        (*i)->Rotate(5.0f);
-        player->Rotate(0.1f);
-        player->Draw();
+    for (auto i = engineList.begin(); i != engineList.end();) {
+        //OBS: DELETAR LISTA NO FINALIZE
+        //OutputDebugString("girooooooo");
+        Tiro_aviao * tiro = *i;
+        stringstream o;
+        o << "altura do engine " << tiro->Y() << "altura" << window->Height() << std::endl;
+        if (tiro->Y() - 30.0f >= window->Height()) {
+            OutputDebugString("xxxxxxxxxxxxxxxxxxxxxxx deletooooooou carenagem");
+            OutputDebugString(o.str().c_str());
+            WarriorAdventure::scene->Delete(tiro, STATIC);
+            engineList.erase(i);
+            i = engineList.begin();
+        }//30 e altura da catracaELSE
+        else {
+            tiro->Rotate(-500.0f * gameTime);
+            ++i;
+        }
+        
+        //player->rotation = 250 * gameTime * 0.5f;
+        //player->Rotate(250 * gameTime * 0.5f);
+        //player->Draw();
     }
 
+    for (auto i =  windList.begin(); i != windList.end();) {
+        //OBS: DELETAR LISTA NO FINALIZE
+        //OutputDebugString("girooooooo");
+        Wind * wind = *i;
+        stringstream o;
+        o << "altura do engine " << wind->X() << "altura" << window->Width() << std::endl;
+        if (wind->X() - 35.0f >= window->Width()) {
+            OutputDebugString("xxxxxxxxxxxxxxxxxxxxxxx deletooooooou vento");
+            OutputDebugString(o.str().c_str());
+            WarriorAdventure::scene->Delete(wind, MOVING);
+            windList.erase(i);
+            i = windList.begin();
+        }//30 e altura da catracaELSE
+        else {
+            //tiro->Rotate(-500.0f * gameTime);
+            ++i;
+        }
+
+        //player->rotation = 250 * gameTime * 0.5f;
+        //player->Rotate(250 * gameTime * 0.5f);
+        //player->Draw();
+    }
 
     // habilita/desabilita bounding box
     //if (window->KeyPress('B'))
@@ -217,6 +239,7 @@ void WarriorAdventure::Finalize()
     delete audio;*/
     //delete ppBlock;
     ninjaList.clear();//limpa lista de ninjas porque vão ser deletados abaixo
+    engineList.clear();
     delete scene;
     //delete ppBlock;
 }

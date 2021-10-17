@@ -1,10 +1,7 @@
 #include "Player.h" 
 #include "WarriorAdventure.h" 
-
 // ---------------------------------------------------------------------------------
-
 Player::Player() {
-    
     // carrega folhas de sprites do carro
     playerSet = new TileSet("Resources/warrior.png", 91, 109, 10, 40);
     playerAni = new Animation(playerSet, 0.05f, true);//0.01f
@@ -14,7 +11,6 @@ Player::Player() {
     uint idle[10] = {10, 11, 12, 13, 14, 15, 16, 17, 18, 19};
     uint attack[10] = {20, 21, 22, 23, 24, 25, 26, 27, 28, 29 };
     uint run[10] = { 30, 31, 32, 33, 34, 35, 36, 37, 38, 39 };
-    
 
     playerAni->Add(static_cast<int>(StatePlayer::JUMP), jump, 5);
     playerAni->Add(static_cast<int>(StatePlayer::FALL), fall, 5);
@@ -34,15 +30,14 @@ Player::Player() {
     // configura posição do objeto
     MoveTo(window->CenterX(), window->CenterY());
     type = PLAYER;
-    
 }
 
 // ---------------------------------------------------------------------------------
 
 Player::~Player()
 {
-    //delete carAni;
-    //delete carSet;
+    delete playerAni;
+    delete playerSet;
     //delete speedFont;
 }
 
@@ -55,14 +50,11 @@ void Player::Update()
     if (window->KeyDown(VK_RIGHT)) Translate(speedX * gameTime,0.0f);//deve ser 0 e não mudar no y
     if (window->KeyDown(VK_LEFT)) Translate(-1.0f * speedX * gameTime, 0.0f);//deve ser 0 e não mudar no y
    
-
    stringstream c;
    c << "on = " << onBlock << std::endl;
        
     /* pulo */
     if (window->KeyPress(VK_SPACE) && statePlayer == StatePlayer::RUN) {// 
-        //speedY = -100.0f;
-       //  OutputDebugString(c.str().c_str());
         //releaseTimerJump = false;
         //timerJump.Start();
         statePlayer = StatePlayer::JUMP;
@@ -131,12 +123,22 @@ void Player::Update()
     if (statePlayer == StatePlayer::ATTACK) {
         stringstream s;
         s << "xxxxxxxxxxxxxxxxxxx atacooooou" << playerAni->Frame() << std::endl;
-        //OutputDebugString(s.str().c_str());
+        
         if (playerAni->Frame() == 29) {
             statePlayer = StatePlayer::RUN;
             playerAni->Restart();
             playerAni->Select(static_cast<uint>(statePlayer));
         }
+        /* criar vento */
+        if (playerAni->Frame() == 25 && throwWind) {
+            throwWind = false;
+            s << "criou vento" << std::endl;
+            Wind* wind = new Wind(X() + float(playerSet->TileWidth()) / 2.0f, Y());
+            WarriorAdventure::scene->Add(wind, MOVING);
+            WarriorAdventure::windList.push_back(wind);
+        }
+        if(playerAni->Frame() != 25) throwWind = true;//não para botar no mesmo if porque iria ficar trocando permite, nega, permite, nega no mesmo frame
+        OutputDebugString(s.str().c_str());
     }
 
 
@@ -201,7 +203,7 @@ void Player::Update()
 void Player::Draw()
 {
     // desenha carro
-    playerAni->Draw(x, y, Layer::FRONT);
+    playerAni->Draw(x, y, Layer::FRONT, 1.0f, rotation);
 
     // desenha velocidade
     /*text.str("");

@@ -191,6 +191,7 @@
     <ClCompile Include="Tiro_aviao.cpp" />
     <ClCompile Include="TopGear.cpp" />
     <ClCompile Include="WarriorAdventure.cpp" />
+    <ClCompile Include="Wind.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -224,6 +225,7 @@
     <ClInclude Include="TopGear.h" />
     <ClInclude Include="Types.h" />
     <ClInclude Include="WarriorAdventure.h" />
+    <ClInclude Include="Wind.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>

@@ -1,2 +1,11 @@
-﻿  WarriorAdventure.cpp
+﻿  Airplane.cpp
+  Block.cpp
+  Ninja.cpp
+  Player.cpp
+  Tiro_aviao.cpp
+  TopGear.cpp
+  WarriorAdventure.cpp
+  Wind.cpp
+  kunai.cpp
+  Gerando Código...
   TopGear.vcxproj -> C:\Users\rai_e\Desktop\game\WarriorAdventure\TopGear\Debug\TopGear.exe

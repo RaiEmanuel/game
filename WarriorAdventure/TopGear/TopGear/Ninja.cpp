@@ -49,8 +49,8 @@ Ninja::Ninja(float posX) {
 
 Ninja::~Ninja()
 {
-    //delete carAni;
-    //delete carSet;
+    delete ninjaSet;
+    delete ninjaAni;
     //delete speedFont;
 }
 
@@ -72,10 +72,12 @@ void Ninja::Update()
     //sempre andando no y 
     if (stateNinja == StateNinja::ATTACK){ //&& window->KeyPress(VK_RETURN)) {
         stringstream ss;
-        ss << "frame = " << ninjaAni->Frame() << std::endl;
-       // OutputDebugString(ss.str().c_str());
+        
+
        if (ninjaAni->Frame() == 7) {
             //OutputDebugString("Throw");
+           ss << "ccccccccccccccccccccriou throwKunai " << std::endl;
+           OutputDebugString(ss.str().c_str());
             throwKunai = new ThrowKunai();//deletado na criação da kunai no warrioradventure
             throwKunai->posX = X();//- float(ninjaSet->TileWidth()) / 2.0f;
             throwKunai->posY = Y();

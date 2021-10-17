@@ -43,6 +43,6 @@ void Tiro_aviao::Update()
 // -------------------------------------------------------------------------------
 void Tiro_aviao::Draw()
 {
-    spriteTiro_aviao->Draw(X(), Y(), Layer::FRONT);
+    spriteTiro_aviao->Draw(X(), Y(), Layer::FRONT, 1.0f, rotation);
 }
 // -------------------------------------------------------------------------------
