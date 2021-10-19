@@ -1,9 +1,7 @@
 
 #ifndef _GAMEOVER_H_
 #define _GAMEOVER_H_
-
 // ---------------------------------------------------------------------------------
-
 #include "Game.h"
 #include "Image.h"
 #include "Sprite.h"
@@ -16,32 +14,20 @@
 #include "Block.h"
 #include "kunai.h"
 #include <fstream>
-#include <list>
 #include "Airplane.h"
 #include "Tiro_aviao.h"
 #include "Wind.h"
 #include "Boss.h"
-
-
 // ------------------------------------------------------------------------------
-
-//enum SoundIds { MUSIC, ENGINE, COLLISION };//continuar
-//enum ObjectTypes { PLAYER, BLOCK, ZOOMBIE, NINJA, AIRPLANE, KUNAI, TIRO_AVIAO, WIND, BOSS };
-
 enum Musics { GAMEOVERVOICE, GAMEOVERTHEME };//continuar
-
-
 // ------------------------------------------------------------------------------
-
 class GameOver : public Game
 {
-
 public: 
     //static Scene* scene;          // gerenciador de cena
-
+    static bool initializedPlayer;     //precisa dessa variável porque o init do player é chamado apenas uma vez e precisa reiniciá-lo a cada nova fase
 private:
     Sprite * background = nullptr;
-
 
 public:
     static Audio* audio;               // gerenciador de áudio

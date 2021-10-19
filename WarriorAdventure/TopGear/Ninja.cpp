@@ -51,17 +51,12 @@ Ninja::~Ninja()
 {
     delete ninjaSet;
     delete ninjaAni;
-    //delete speedFont;
 }
 
 // ---------------------------------------------------------------------------------
 
 void Ninja::Update()
 {
-    // acelera ou freia
-    //NinjaAni->Select(stateNinja);
-    //speedX -= 100 * gameTime;
-    
     //primeira execução do pulo o onBlock ainda é true, garante primeiro deslocamento com velocidade Y definida no pulo
     if (!onBlock) speedY += gravity;//gravidade age quando não está no bloco. Evitar excesso de soma e overfllow futuro
     Translate(speedX * gameTime, speedY * gameTime);
@@ -72,23 +67,22 @@ void Ninja::Update()
     //sempre andando no y 
     if (stateNinja == StateNinja::ATTACK){ //&& window->KeyPress(VK_RETURN)) {
         stringstream ss;
-        
-
        if (ninjaAni->Frame() == 7) {
+           throwKunai = false;
             //OutputDebugString("Throw");
            ss << "ccccccccccccccccccccriou throwKunai " << std::endl;
            OutputDebugString(ss.str().c_str());
-            throwKunai = new ThrowKunai();//deletado na criação da kunai no warrioradventure
-            throwKunai->posX = X();//- float(ninjaSet->TileWidth()) / 2.0f;
-            throwKunai->posY = Y();
-            throwKunai->velX = speedX - 200.0f;
+            WarriorAdventure::scene->Add(new Kunai(X(),Y(),-400.0f),MOVING);
        }
        if (ninjaAni->Frame() == 0) {
+           throwKunai = true;
            stateNinja = StateNinja::RUN;
            ninjaAni->Select(static_cast<uint>(stateNinja));
        }
     }
-    
+    if (died) {
+        WarriorAdventure::scene->Delete();
+    }
     ninjaAni->NextFrame();
 }
 
@@ -149,6 +143,9 @@ void Ninja::OnCollision(Object* obj)
             }
         }
 
+    }
+    if (obj->Type() == WIND) {
+        died = true;
     }
 }
 

@@ -4,12 +4,7 @@
 // ---------------------------------------------------------------------------------
 Background_boss_fight::Background_boss_fight() {
     spriteBackground_boss_fight = new Sprite("Resources/volcano.png");
-    // cria bounding box
-    //BBox(new Rect(-80.0f, -40.0f, 80.0f, 48.0f));
-
-    // configura posição do objeto
-    //MoveTo(window->CenterX(), window->CenterY() + 200.0f);
-    //MoveTo(speedX * gameTime, 400.0f);
+   
 }
 
 // ---------------------------------------------------------------------------------

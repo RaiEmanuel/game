@@ -28,15 +28,8 @@ Kunai::~Kunai()
 void Kunai::Update()
 {
     Translate(speedX * gameTime, 0.0f);
-
-    if (X() + float(spriteKunai->Width()) / 2.0f <= 0)
-    {
-        //OutputDebugString("Deletando kunai da cena e do jogo");
-        isExit = true;
-    }
     //1000 porque é metade da image
     //if (X() <= 0.0f) MoveTo(float(window->Width()), float(window->CenterY()));
-
 }
 // -------------------------------------------------------------------------------
 void Kunai::Draw()

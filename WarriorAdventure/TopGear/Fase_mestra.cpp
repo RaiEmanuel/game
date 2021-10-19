@@ -2,29 +2,26 @@
 #include "Fase_mestra.h"
 #include "WarriorAdventure.h"
 #include "Boss_fight.h"
-
 // inicializa membros estáticos da classe
 Game* Fase_mestra::level = nullptr;
 Player* Fase_mestra::player = nullptr;
 Audio* Fase_mestra::audio = nullptr;
 bool    Fase_mestra::viewBBox = false;
-Fase_mestra::SelectedLevel Fase_mestra::qual_nivel = Fase_mestra::SelectedLevel::LEVEL1;
-
+Fase_mestra::SelectedLevel Fase_mestra::qual_nivel = Fase_mestra::SelectedLevel::LEVEL2;
+bool Menu::initializedPlayer = false;
+bool WarriorAdventure::initializedPlayer = false;
+bool Boss_fight::initializedPlayer = false;
+bool GameOver::initializedPlayer = false;
+//listas
 // ------------------------------------------------------------------------------
-
 void Fase_mestra::Init()
 {
     // cria sistema de áudio
     audio = new Audio();
-    
-
     // bounding box não visível
     viewBBox = false;
-
     // cria jogador
     player = new Player();
-
-    // inicializa nível de abertura do jogo
     switch (Fase_mestra::qual_nivel)
     {
     case Fase_mestra::SelectedLevel::MENU:
@@ -37,13 +34,12 @@ void Fase_mestra::Init()
         level = new Boss_fight();
         break;
     case Fase_mestra::SelectedLevel::WIN:
-        //level = gameover;
+        level = new GameOver();
         break;
     case Fase_mestra::SelectedLevel::GAMEOVER:
         level = new GameOver();
         break;
     }
-    
     level->Init();
 }
 
@@ -51,10 +47,6 @@ void Fase_mestra::Init()
 
 void Fase_mestra::Update()
 {
-    // habilita/desabilita visualização da bounding box
-    //if (window->KeyPress('B'))
-        //viewBBox = !viewBBox;
-
     // atualiza nível
     level->Update();
 }
@@ -65,7 +57,6 @@ void Fase_mestra::Draw()
 {
     // desenha nível
     level->Draw();
-    //player->Draw();
 }
 
 // ------------------------------------------------------------------------------
@@ -78,8 +69,6 @@ void Fase_mestra::Finalize()
     delete audio;
     delete level;
 }
-
-
 
 // ------------------------------------------------------------------------------
 //                                  WinMain                                      

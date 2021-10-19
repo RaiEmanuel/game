@@ -12,16 +12,6 @@
 #include <sstream>
 using std::stringstream;
 
-// ---------------------------------------------------------------------------------
-
-struct ThrowKunai {
-    float posX = 500.0f;
-    float posY = 500.0f;
-    float velX = -150.0f;
-};
-
-// ---------------------------------------------------------------------------------
-
 class Ninja : public Object
 {
 enum class StateNinja { IDLE, RUN, ATTACK, JUMP, FALL, LAND, CLIMB, JUMPATTACK, FALLATTACK };
@@ -33,18 +23,14 @@ private:
     float speedX = -200.0f;              // velocidade do carro
     float speedY = 0.0f;              // velocidade do carro
     stringstream text;          // exibição de texto
-    //Timer timerJump;            //controla tempo do pulo
-   // bool releaseTimerJump = false; //controla liberação do timer do pulo, true significa que pode disparar pulo
-    //float initYJump = 0.0f;
+   
     bool onBlock = false; //verifica se está num bloco na iteração
     StateNinja stateNinja = StateNinja::LAND;
     const float gravity = 1.0f;//gravidade que fica puxando player 100% do tempo para baixo.
     //mais suave por causa da resistência do ar
-    
+    bool throwKunai = true;
+    bool died = false;
 public:
-    //público para o jogo ter acesso
-    ThrowKunai* throwKunai = nullptr;//variável para a cena ver se tem kunai para ser lançada
-
     Ninja(float posX);                   // construtor
     ~Ninja();                  // destrutor
 

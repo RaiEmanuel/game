@@ -1,8 +1,6 @@
 #include "Airplane.h" 
 #include "WarriorAdventure.h" 
-
 // ---------------------------------------------------------------------------------
-
 static int contador_saida_da_tela;
 static int tiros_lancados;
 
@@ -44,7 +42,6 @@ Airplane::~Airplane()
 {
     delete airplaneAni;
     delete airplaneSet;
-    //delete speedFont;
 }
 
 // ---------------------------------------------------------------------------------
@@ -68,29 +65,21 @@ void Airplane::Update()
         if (tiros_lancados <= contador_saida_da_tela && X() < 950 && X() > 50 )
         {
             stringstream ss;
-            ss << "ccccccccccccccccccccriou tengine " << std::endl;
             OutputDebugString(ss.str().c_str());
             Tiro_aviao * tiro = new Tiro_aviao(X() - float(airplaneSet->TileWidth())/2.0f, Y());
             WarriorAdventure::scene->Add(tiro, STATIC);
-            WarriorAdventure::engineList.push_back(tiro);
             tiros_lancados++;
         }
     }
 
-    
-
     airplaneAni->NextFrame();
 }
-
 // -------------------------------------------------------------------------------
-
 void Airplane::Draw()
 {
     airplaneAni->Draw(X(), Y(), Layer::FRONT);
 }
-
 void Airplane::OnCollision(Object* obj)
-{ 
+{
 }
-
 // -------------------------------------------------------------------------------

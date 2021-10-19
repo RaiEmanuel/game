@@ -10,17 +10,16 @@ Boss::Boss()
 	bossSet = new TileSet("Resources/robo.png", 79, 110, 10, 50);
 	bossAni = new Animation(bossSet, 0.08f, true);//0.01f
 
-
     uint idle[10] = { 9,8,7,6,5,4,3,2,1,0 };
     uint shoot[24] = { 9,8,7,6,5,4,3,2,1,0,9,8,7,6,5,4,3,2,1,0,19,18,17,16};
-    uint explosion[10] = { 29,28,27,26,25,24,23,22,21,20 };
+    uint explosion[16] = { 29,28,27,26,25,24,23,22,22,22,22,22,22,22,21,20 };
     uint chegando_teletransporte[10] = { 39,38,37,36,35,34,33,32,31,30 };
     uint saindo_teletransporte[10] = { 49,48,47,46,45,44,43,42,41,40 };
    
 
     bossAni->Add(static_cast<uint>(StateBoss::IDLE), idle, 10);
     bossAni->Add(static_cast<uint>(StateBoss::SHOOT), shoot, 24);
-    bossAni->Add(static_cast<uint>(StateBoss::EXPLOSION), explosion, 10);
+    bossAni->Add(static_cast<uint>(StateBoss::EXPLOSION), explosion, 16);
     bossAni->Add(static_cast<uint>(StateBoss::INPUT_TELEPORTATION), chegando_teletransporte, 10);
     bossAni->Add(static_cast<uint>(StateBoss::EXIT_TELEPORTATION), saindo_teletransporte, 10);
     bossAni->Select(static_cast<uint>(stateBoss));
@@ -156,11 +155,7 @@ void Boss::OnCollision(Object* obj)
             ss << "se fu****** " << std::endl;
             OutputDebugString(ss.str().c_str());
             Wind* ventinho = static_cast<Wind*>(obj);
-            auto iVentinho = find(Boss_fight::windList2.begin(), Boss_fight::windList2.end(), ventinho);
-            if (iVentinho != Boss_fight::windList2.end()) {
-                Boss_fight::scene->Delete(*iVentinho, MOVING);
-                Boss_fight::windList2.erase(iVentinho);
-            }
+            Boss_fight::scene->Delete(ventinho, MOVING);
         }
     }
     

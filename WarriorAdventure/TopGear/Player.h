@@ -7,7 +7,7 @@
 #include "Types.h"               // tipos específicos do motor
 #include "Font.h"                // desenho de texto 
 #include "Wind.h"                // desenho de texto 
-
+#include "Phone.h"
 #include <sstream>
 using std::stringstream;
 // ---------------------------------------------------------------------------------
@@ -21,7 +21,7 @@ private:
     float speedX = 300.0f;        // velocidade do carro
     float speedY = 0.0f;          // velocidade do carro
     stringstream text;            // exibição de texto
-    
+    Timer timerDied;
     bool onBlock = false;         //verifica se está num bloco na iteração
     bool throwWind = true;        //pode lançar vento
     

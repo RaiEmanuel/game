@@ -29,7 +29,7 @@ void Tiro_aviao::Update()
 {
     speedY += gravity;
     Translate( speedX * gameTime, speedY * gameTime);
-    
+    Rotate(300.0f * gameTime);
 
     //if (Y() + float(spriteTiro_aviao->Width()) / 2.0f >= window->Width())
     //{

@@ -26,8 +26,8 @@ Bola_de_fogo::Bola_de_fogo(float posX, float posY, float velX) {
 // ---------------------------------------------------------------------------------
 Bola_de_fogo::~Bola_de_fogo()
 {
-    delete bola_de_fogoAni;
     delete bola_de_fogoSet;
+    delete bola_de_fogoAni;
 }
 // ---------------------------------------------------------------------------------
 void Bola_de_fogo::Update()

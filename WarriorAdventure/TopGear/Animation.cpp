@@ -106,7 +106,6 @@ void Animation::NextFrame()
     if (timer.Elapsed(animDelay))
     {
         frame++;
-
         // se chegou ao fim da animação
         if (frame > endFrame)
         {

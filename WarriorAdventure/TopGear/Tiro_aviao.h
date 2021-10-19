@@ -24,7 +24,7 @@ class Tiro_aviao : public Object
 private:
     Sprite* spriteTiro_aviao = nullptr; //cena de fundo que corre para trás
     float speedY = 100.0f;
-    float speedX = Block::speedX - 200.0f;
+    float speedX = Block::speedX - 300.0f;
     float gravity = 5.0f;
 
 

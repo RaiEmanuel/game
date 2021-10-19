@@ -1,6 +1,6 @@
 #include "Block.h"
 #include "WarriorAdventure.h"
-
+float Block::speedX = -100.0f;
 // ---------------------------------------------------------------------------------
 Block::Block(TypeBlock typeBlock, float posX, float posY) {
     switch (typeBlock) {
