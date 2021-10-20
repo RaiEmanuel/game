@@ -43,6 +43,7 @@ void Wind::Draw()
 
 void Wind::OnCollision(Object * obj) {
     if (obj->Type() == NINJA) {
+        Fase_mestra::player->points++;
     }
 }
 

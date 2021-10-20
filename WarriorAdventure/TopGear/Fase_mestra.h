@@ -9,6 +9,7 @@
 #include "GameOver.h"
 #include "Menu.h"
 #include "Phone.h"
+#include "Win.h"
 
 // ------------------------------------------------------------------------------
 //enum Sounds { MENU, MUSIC, TRANSITION };

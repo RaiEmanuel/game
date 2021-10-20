@@ -16,6 +16,7 @@ Wind * Menu::ventinho = nullptr;
 //float Block::speedX = -100.0f;
 void Menu::Init()
 {
+    Fase_mestra::player->points = 0;
     escolha_feita = false;
     Menu::scene = new Scene();
     scene->Add(Fase_mestra::player, MOVING);
@@ -74,8 +75,8 @@ void Menu::Update()
                         // win, falta fazer e linkar aqui
                     case 3:
                         Fase_mestra::qual_nivel = Fase_mestra::SelectedLevel::WIN;
-                        GameOver::initializedPlayer = false;
-                        Fase_mestra::NextLevel<GameOver>();
+                        Win::initializedPlayer = false;
+                        Fase_mestra::NextLevel<Win>();
                         break;
                     }
                 }

@@ -3,6 +3,7 @@
 #include "Player.h"
 #include "block.h"
 #include <stdlib.h>
+#include "Win.h"
 // ------------------------------------------------------------------------------
 // inicialização de membros estáticos da classe
 Audio* WarriorAdventure::audio = nullptr;
@@ -56,17 +57,17 @@ void WarriorAdventure::Update()
         ///**********************************************
         /* ajuste para win*/
         Fase_mestra::player->win = false;
-        Fase_mestra::qual_nivel = Fase_mestra::SelectedLevel::MENU;
-        Menu::initializedPlayer = false;
-        Fase_mestra::NextLevel<Menu>();
+        Fase_mestra::qual_nivel = Fase_mestra::SelectedLevel::LEVEL2;
+        Boss_fight::initializedPlayer = false;
+        Fase_mestra::NextLevel<Boss_fight>();
     }
     else if (window->KeyPress(VK_RETURN)) {
         ///**********************************************
         /* ajuste para win*/
         Fase_mestra::player->win = false;
-        Fase_mestra::qual_nivel = Fase_mestra::SelectedLevel::MENU;
-        Menu::initializedPlayer = false;
-        Fase_mestra::NextLevel<Menu>();
+        Fase_mestra::qual_nivel = Fase_mestra::SelectedLevel::WIN;
+        Win::initializedPlayer = false;
+        Fase_mestra::NextLevel<Win>();
     } else {
        //cria ninjas
         if (timerLandNewNinja.Elapsed(5)) {//4s lança novo ninja em posição aleatória da tela

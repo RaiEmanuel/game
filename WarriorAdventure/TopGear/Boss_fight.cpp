@@ -19,7 +19,7 @@ void Boss_fight::Init()
     // cria gerenciadores
     scene = new Scene();
     background_boss_fight = new Background_boss_fight();
-    Fase_mestra::player->MoveTo(window->CenterX()-80, 0.f);
+    Fase_mestra::player->MoveTo(window->CenterX()-80, 0.0f);
     
     boss = new Boss();
     medidor.Start();
@@ -67,6 +67,7 @@ void Boss_fight::Init()
     background_boss_fight->MoveTo(background_boss_fight->X() + window->Width()/2, background_boss_fight->Y()+window->Height()/2);
     scene->Add(background_boss_fight, STATIC);
     scene->Add(Fase_mestra::player, MOVING);
+    chefe_derrotado = false;
     scene->Add(boss, STATIC);
     audio = new Audio();
     // carregar músicas e efeitos sonoros
@@ -87,29 +88,36 @@ void Boss_fight::Update()
         Fase_mestra::qual_nivel = Fase_mestra::SelectedLevel::GAMEOVER;
         GameOver::initializedPlayer = false;
         Fase_mestra::NextLevel<GameOver>();
-    }if (chefe_derrotado) {
-        Fase_mestra::qual_nivel = Fase_mestra::SelectedLevel::WIN;
-        /**************************************/
-        /*******  CORRIGIR PARA CLASSE WIN ****/
-        /**************************************/
-        GameOver::initializedPlayer = false;
-        Fase_mestra::NextLevel<GameOver>();
     }
-    else if (Fase_mestra::player->died) {
-        Fase_mestra::player->died = false;
-        Fase_mestra::qual_nivel = Fase_mestra::SelectedLevel::GAMEOVER;
-        GameOver::initializedPlayer = false;
-        Fase_mestra::NextLevel<GameOver>();
-    }else {
-        /* OBSS: OTIMIZAR O FOR COMPONENTIZANDO EM FUNÇÃO GENÉRICA  */
-        if (medidor.Elapsed(6))
-        {
-            if (chefe_derrotado == false)
+    else
+    {
+        if (chefe_derrotado) {
+            Fase_mestra::qual_nivel = Fase_mestra::SelectedLevel::WIN;
+            /**************************************/
+            /*******  CORRIGIR PARA CLASSE WIN ****/
+            /**************************************/
+            Win::initializedPlayer = false;
+            Fase_mestra::player->throwWind = true;
+            Fase_mestra::NextLevel<Win>();
+        }
+        else if (Fase_mestra::player->died) {
+            Fase_mestra::player->throwWind = true;
+            Fase_mestra::player->died = false;
+            Fase_mestra::qual_nivel = Fase_mestra::SelectedLevel::GAMEOVER;
+            GameOver::initializedPlayer = false;
+            Fase_mestra::NextLevel<GameOver>();
+        }
+        else {
+            /* OBSS: OTIMIZAR O FOR COMPONENTIZANDO EM FUNÇÃO GENÉRICA  */
+            if (medidor.Elapsed(6))
             {
-                OutputDebugString("Chamou teleporte\n");
-                boss->teletransporte();
+                if (chefe_derrotado == false)
+                {
+                    OutputDebugString("Chamou teleporte\n");
+                    boss->teletransporte();
+                }
+                medidor.Reset();
             }
-            medidor.Reset();
         }
     }
 }
@@ -123,6 +131,7 @@ void Boss_fight::Draw()
 // ------------------------------------------------------------------------------
 void Boss_fight::Finalize()
 {
+    Fase_mestra::player->died = false;
     scene->Remove(Fase_mestra::player, MOVING);
     Boss_fight::initializedPlayer = false;
     delete scene;

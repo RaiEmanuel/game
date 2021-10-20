@@ -23,7 +23,7 @@ private:
     stringstream text;            // exibição de texto
     Timer timerDied;
     bool onBlock = false;         //verifica se está num bloco na iteração
-    bool throwWind = true;        //pode lançar vento
+    
     
     Player::StatePlayer statePlayer = StatePlayer::FALL;
     const float gravity = 20.0f;//gravidade que fica puxando player 100% do tempo para baixo
@@ -31,6 +31,8 @@ public:
     uint points = 0;            //quantidade de ninjas mortos
     bool died = false;
     bool win = false;
+    bool throwWind = true;        //pode lançar vento
+   
     Player();                   // construtor
     ~Player();                  // destrutor
 

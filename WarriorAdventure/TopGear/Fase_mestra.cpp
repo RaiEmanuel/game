@@ -2,16 +2,18 @@
 #include "Fase_mestra.h"
 #include "WarriorAdventure.h"
 #include "Boss_fight.h"
+
 // inicializa membros estáticos da classe
 Game* Fase_mestra::level = nullptr;
 Player* Fase_mestra::player = nullptr;
 Audio* Fase_mestra::audio = nullptr;
 bool    Fase_mestra::viewBBox = false;
-Fase_mestra::SelectedLevel Fase_mestra::qual_nivel = Fase_mestra::SelectedLevel::LEVEL2;
+Fase_mestra::SelectedLevel Fase_mestra::qual_nivel = Fase_mestra::SelectedLevel::WIN;
 bool Menu::initializedPlayer = false;
 bool WarriorAdventure::initializedPlayer = false;
 bool Boss_fight::initializedPlayer = false;
 bool GameOver::initializedPlayer = false;
+bool Win::initializedPlayer = false;
 //listas
 // ------------------------------------------------------------------------------
 void Fase_mestra::Init()

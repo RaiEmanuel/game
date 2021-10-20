@@ -2,15 +2,15 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>C:\Users\rai_e\Desktop\game\WarriorAdventure\Debug\TopGear.exe</FullPath>
+      <FullPath>F:\game\WarriorAdventure\Debug\TopGear.exe</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles>
     <ContentFile>
-      <FullPath>C:\Users\rai_e\Desktop\game\WarriorAdventure\TopGear\Shaders\Pixel.cso</FullPath>
+      <FullPath>F:\game\WarriorAdventure\TopGear\Shaders\Pixel.cso</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>C:\Users\rai_e\Desktop\game\WarriorAdventure\TopGear\Shaders\Vertex.cso</FullPath>
+      <FullPath>F:\game\WarriorAdventure\TopGear\Shaders\Vertex.cso</FullPath>
     </ContentFile>
   </ContentFiles>
   <SatelliteDlls />

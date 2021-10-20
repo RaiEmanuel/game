@@ -118,6 +118,7 @@ void Player::Update()
     /* ***********************  LEVEL 1  ******************** */
     case Fase_mestra::SelectedLevel::LEVEL1:
         if (!WarriorAdventure::initializedPlayer) {
+            Fase_mestra::player->points = 0;
             OutputDebugString("inicializou playeeeeeeeer levellll 111111\n");
             WarriorAdventure::initializedPlayer = true;
             statePlayer = StatePlayer::FALL;
@@ -207,8 +208,9 @@ void Player::Update()
             statePlayer = StatePlayer::IDLE;
             playerAni->Select(static_cast<uint>(statePlayer));
             playerAni->Restart();
-            MoveTo(200, 300);
+            //MoveTo(200, 300);
             Block::speedX = 0.0f;
+           
         }
         playerAni->NextFrame();
         //ajusta idle. Se for corrida será selecionado abaixo
@@ -217,14 +219,23 @@ void Player::Update()
             playerAni->Select(static_cast<uint>(statePlayer));
         }
         if (window->KeyDown(VK_RIGHT) || window->KeyDown('D')) {
-            statePlayer = StatePlayer::RUN;
-            playerAni->Select(static_cast<uint>(statePlayer));
+            
+
+            if (statePlayer != StatePlayer::ATTACK)
+            {
+                statePlayer = StatePlayer::RUN;
+                playerAni->Select(static_cast<uint>(statePlayer));
+            }
+
             //playerAni->Restart();
             Translate(speedX * gameTime, 0.0f);//deve ser 0 e não mudar no y
         }
         else if (window->KeyDown(VK_LEFT) || window->KeyDown('A')) {
-            statePlayer = StatePlayer::RUN;
-            playerAni->Select(static_cast<uint>(statePlayer));
+            if (statePlayer != StatePlayer::ATTACK)
+            {
+                statePlayer = StatePlayer::RUN;
+                playerAni->Select(static_cast<uint>(statePlayer));
+            }
             //playerAni->Restart();
             Translate(-1.0f * speedX * gameTime, 0.0f);//deve ser 0 e não mudar no y
         }
@@ -250,7 +261,11 @@ void Player::Update()
             playerAni->Restart();
         }
         /*queda */
-        if (Y() >= 700) died = true;
+        if (Y() >= 700)
+        {
+            died = true;
+            throwWind = true;
+        }
         //OBS: cuidado no igual a zero porque no pico da parábola e no chão ambos a valocidade vale zero
         //sempre andando no y 
         /* ataque */
@@ -262,13 +277,15 @@ void Player::Update()
         if (statePlayer == StatePlayer::ATTACK) {
             stringstream s;
             /* Acabou animação e volta a correr */
+
             if (playerAni->Frame() == 29) {
                 statePlayer = StatePlayer::IDLE;
                 playerAni->Select(static_cast<uint>(statePlayer));
                 playerAni->Restart();
+                throwWind = true;
             }
             /* frame para criar vento */
-            if (playerAni->Frame() == 25 && throwWind) {
+            if (/*playerAni->Frame() == 25 &&*/ throwWind) {
                 throwWind = false;
                 //s << "criou vento" << std::endl;
                 //OutputDebugString(s.str().c_str());
@@ -277,7 +294,7 @@ void Player::Update()
                 //Boss_fight::windList2.push_back(wind);
             }
             //passou da criação do vento pode recriar
-            if (playerAni->Frame() != 25) throwWind = true;//não para botar no mesmo if porque iria ficar trocando permite, nega, permite, nega no mesmo frame
+            //if (playerAni->Frame() != 25) throwWind = true;//não para botar no mesmo if porque iria ficar trocando permite, nega, permite, nega no mesmo frame
         }
         break;
     case Fase_mestra::SelectedLevel::GAMEOVER:
@@ -347,6 +364,11 @@ void Player::OnCollision(Object * obj)
     if (obj->Type() == KUNAI || obj->Type() == TIRO_AVIAO || obj->Type() == FIREBALL || obj->Type() == NINJA) {
         died = true;
     }
+
+    if (obj->Type() == PHONE) {
+        Fase_mestra::player->win = true;
+    }
+
     // desenha velocidade
     /*text.str("");
     text.width(3);
