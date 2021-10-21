@@ -40,6 +40,8 @@ void Menu::Init()
     // carregar músicas e efeitos sonoros
     audio->Add(THEME, "Resources/theme.wav");
     audio->Play(THEME, true);
+
+    audio->Add(VENTO, "Resources/vento.wav");
 }
 // ------------------------------------------------------------------------------
 void Menu::Update()
@@ -98,6 +100,8 @@ void Menu::Draw()
 
 void Menu::Finalize()
 {
+    if (ventinho != nullptr)
+        scene->Delete(ventinho, MOVING);
     ventinho = nullptr;
     delete audio;
     delete background;

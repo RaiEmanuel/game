@@ -17,7 +17,7 @@ void WarriorAdventure::Init()
     scene = new Scene();
     scene->Add(Fase_mestra::player, MOVING);
     background = new Background();
-    phone = new Phone(2300,550);
+    phone = new Phone(2300,480);
     scene->Add(phone, STATIC);
     //-----------------------------
     airplane = new Airplane();
@@ -28,9 +28,13 @@ void WarriorAdventure::Init()
     scene->Add(background, STATIC);
     audio = new Audio();
     // carregar músicas e efeitos sonoros
-    audio->Add(MUSIC, "Resources/theme2.wav");
+    audio->Add(PULO, "Resources/jump.wav");
     
+    
+    audio->Add(MUSIC, "Resources/theme2.wav");
     audio->Play(MUSIC, true);
+
+    audio->Add(VENTO, "Resources/vento.wav");
    
     timerLandNewNinja.Start();
 }
@@ -48,10 +52,13 @@ void WarriorAdventure::Update()
     scene->Update();
 
     if (Fase_mestra::player->died){
-        Fase_mestra::player->died = false;
-        Fase_mestra::qual_nivel = Fase_mestra::SelectedLevel::GAMEOVER;
-        GameOver::initializedPlayer = false;
-        Fase_mestra::NextLevel<GameOver>();
+       
+          
+            Fase_mestra::player->died = false;
+            Fase_mestra::qual_nivel = Fase_mestra::SelectedLevel::GAMEOVER;
+            GameOver::initializedPlayer = false;
+            Fase_mestra::NextLevel<GameOver>();
+
     }
     else if (Fase_mestra::player->win) {
         ///**********************************************

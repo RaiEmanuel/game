@@ -71,11 +71,11 @@ void Player::Update()
     {
     case Fase_mestra::SelectedLevel::MENU:
         if (!Menu::initializedPlayer) {
-            OutputDebugString("inicializou playeeeeeeeer\n");
             Menu::initializedPlayer = true;
             statePlayer = StatePlayer::IDLE;
             playerAni->Select(static_cast<uint>(statePlayer));
             MoveTo(window->CenterX(), 300);
+            throwWind = true;
         }
         playerAni->NextFrame();
        
@@ -104,16 +104,24 @@ void Player::Update()
             playerAni->Restart();
         }
         if (Fase_mestra::player->statePlayer == StatePlayer::ATTACK) {
+          
             if (playerAni->Frame() == 29) {
-                throwWind = true; 
                 statePlayer = StatePlayer::IDLE;
                 playerAni->Select(static_cast<uint>(statePlayer));
                 playerAni->Restart();
-                Wind* wind = new Wind(Fase_mestra::player->X(), Fase_mestra::player->Y());
+            }
+
+            if (playerAni->Frame() == 25 && throwWind) {
+                throwWind = false;
+                Wind* wind = new Wind(X() + float(playerSet->TileWidth()) / 2.0f, Y());
+                //Wind* wind = new Wind(Fase_mestra::player->X(), Fase_mestra::player->Y());
                 Menu::ventinho = wind;
                 Menu::scene->Add(wind, MOVING);
+                Menu::audio->Play(VENTO, FALSE);
             }
+            if (playerAni->Frame() != 25) throwWind = true;//não para botar no mesmo if porque iria ficar trocando permite, nega, permite, nega no mesmo frame
         }
+
     break;
     /* ***********************  LEVEL 1  ******************** */
     case Fase_mestra::SelectedLevel::LEVEL1:
@@ -130,15 +138,9 @@ void Player::Update()
         playerAni->NextFrame();
 
         if (window->KeyDown(VK_RIGHT) || window->KeyDown('D')) {
-            statePlayer = StatePlayer::RUN;
-            playerAni->Select(static_cast<uint>(statePlayer));
-            //playerAni->Restart();
             Translate(speedX * gameTime, 0.0f);//deve ser 0 e não mudar no y
         }
         else if (window->KeyDown(VK_LEFT) || window->KeyDown('A')) {
-            statePlayer = StatePlayer::RUN;
-            playerAni->Select(static_cast<uint>(statePlayer));
-            //playerAni->Restart();
             Translate(-1.0f * speedX * gameTime, 0.0f);//deve ser 0 e não mudar no y
         }
       
@@ -148,12 +150,11 @@ void Player::Update()
             playerAni->Select(static_cast<uint>(statePlayer));
             playerAni->Restart();
             speedY = -500.0f;
+            WarriorAdventure::audio->Play(PULO, FALSE);
         }
         /*queda */
         if (Y() >= 700) died = true;
        
-        rx << "x =============== " << X() << std::endl;
-        OutputDebugString(rx.str().c_str());
         if (X() >= 1700) {
             win = true;
         }
@@ -182,7 +183,6 @@ void Player::Update()
             playerAni->Restart();
         }
         if (statePlayer == StatePlayer::ATTACK) {
-            stringstream s;
             /* Acabou animação e volta a correr */
             if (playerAni->Frame() == 29) {
                 statePlayer = StatePlayer::RUN;
@@ -192,25 +192,24 @@ void Player::Update()
             /* frame para criar vento */
             if (playerAni->Frame() == 25 && throwWind) {
                 throwWind = false;
-                s << "criou vento" << std::endl;
-                OutputDebugString(s.str().c_str());
                 Wind* wind = new Wind(X() + float(playerSet->TileWidth()) / 2.0f, Y());
                 WarriorAdventure::scene->Add(wind, MOVING);
+                WarriorAdventure::audio->Play(VENTO, FALSE);
             }
             //passou da criação do vento pode recriar
             if (playerAni->Frame() != 25) throwWind = true;//não para botar no mesmo if porque iria ficar trocando permite, nega, permite, nega no mesmo frame
         }
         break;
+        /* ************************************************** */
+        /* ********************      FASE 2         ********* */
+        /* ************************************************** */
     case Fase_mestra::SelectedLevel::LEVEL2:
         if (!Boss_fight::initializedPlayer) {
-            OutputDebugString("inicializou playeeeeeeeer levellll 22222\n");
             Boss_fight::initializedPlayer = true;
             statePlayer = StatePlayer::IDLE;
             playerAni->Select(static_cast<uint>(statePlayer));
             playerAni->Restart();
-            //MoveTo(200, 300);
             Block::speedX = 0.0f;
-           
         }
         playerAni->NextFrame();
         //ajusta idle. Se for corrida será selecionado abaixo
@@ -219,32 +218,28 @@ void Player::Update()
             playerAni->Select(static_cast<uint>(statePlayer));
         }
         if (window->KeyDown(VK_RIGHT) || window->KeyDown('D')) {
-            
-
-            if (statePlayer != StatePlayer::ATTACK)
-            {
+            if (statePlayer == StatePlayer::IDLE) {
                 statePlayer = StatePlayer::RUN;
                 playerAni->Select(static_cast<uint>(statePlayer));
             }
-
-            //playerAni->Restart();
+            
             Translate(speedX * gameTime, 0.0f);//deve ser 0 e não mudar no y
         }
         else if (window->KeyDown(VK_LEFT) || window->KeyDown('A')) {
-            if (statePlayer != StatePlayer::ATTACK)
-            {
+            if (statePlayer == StatePlayer::IDLE) {
                 statePlayer = StatePlayer::RUN;
                 playerAni->Select(static_cast<uint>(statePlayer));
             }
-            //playerAni->Restart();
             Translate(-1.0f * speedX * gameTime, 0.0f);//deve ser 0 e não mudar no y
         }
+        
         /* pulo */
         if ((window->KeyPress(VK_SPACE) || window->KeyPress('W')) /* && statePlayer == StatePlayer::RUN*/ && onBlock) {// 
             statePlayer = StatePlayer::JUMP;
             playerAni->Select(static_cast<uint>(statePlayer));
             playerAni->Restart();
             speedY = -500.0f;
+            Boss_fight::audio->Play(PULO, FALSE);
         }
         //--------------------------------------------------------------------
         //não estando no bloco a gravidade age
@@ -275,27 +270,23 @@ void Player::Update()
             playerAni->Restart();
         }
         if (statePlayer == StatePlayer::ATTACK) {
-            stringstream s;
             /* Acabou animação e volta a correr */
-
             if (playerAni->Frame() == 29) {
                 statePlayer = StatePlayer::IDLE;
                 playerAni->Select(static_cast<uint>(statePlayer));
                 playerAni->Restart();
-                throwWind = true;
             }
             /* frame para criar vento */
-            if (/*playerAni->Frame() == 25 &&*/ throwWind) {
+            if (playerAni->Frame() == 25 && throwWind) {
                 throwWind = false;
-                //s << "criou vento" << std::endl;
-                //OutputDebugString(s.str().c_str());
                 Wind* wind = new Wind(X() + float(playerSet->TileWidth()) / 2.0f, Y());
                 Boss_fight::scene->Add(wind, MOVING);
-                //Boss_fight::windList2.push_back(wind);
+                Boss_fight::audio->Play(VENTO, FALSE);
+                Boss_fight::audio->Volume(VENTO, 50);
             }
             //passou da criação do vento pode recriar
-            //if (playerAni->Frame() != 25) throwWind = true;//não para botar no mesmo if porque iria ficar trocando permite, nega, permite, nega no mesmo frame
         }
+            if (playerAni->Frame() != 25) throwWind = true;//não para botar no mesmo if porque iria ficar trocando permite, nega, permite, nega no mesmo frame
         break;
     case Fase_mestra::SelectedLevel::GAMEOVER:
         break;
@@ -334,12 +325,6 @@ void Player::OnCollision(Object * obj)
         // 0     1     2      3     4
         //IDLE, RUN, ATTACK, JUMP, FALL
         if (statePlayer != StatePlayer::JUMP) {
-            //OutputDebugString(ss.str().c_str());
-            //ss << "=================== colidindoooooo "<< Y() + float(playerSet->TileHeight()) / 2.0f - (block->Y() - 40.0f)<<", "<< speedY * gameTime << std::endl;
-            //OutputDebugString(ss.str().c_str());
-            //ss << "===================== diferença " << Y() + playerSet->TileHeight() / 2.0f - (block->Y() - 40.0f) << std::endl;
-            //OutputDebugString(ss.str().c_str());
-            //+ 0.5 apenas por imprecisão do ponto flutuante. 
             //Trabalhar com comparação pura é trabalhar no limite em que qualquer "trepidação" pode influênciar negativamente
             if (Y() + float(playerSet->TileHeight())/2.0f - (block->Y() - 40.0f) <= speedY * gameTime /*dist. máx permitida de percorrer */ + 5.0f) {//intervalo de confiança, depende da velocidade que está caindo.
                 //quanto mais alto a queda, maior deve ser o intervalo porque velocidade maior entreria mais no bloco
@@ -362,7 +347,9 @@ void Player::OnCollision(Object * obj)
         }
     }
     if (obj->Type() == KUNAI || obj->Type() == TIRO_AVIAO || obj->Type() == FIREBALL || obj->Type() == NINJA) {
-        died = true;
+      
+            died = true;
+       
     }
 
     if (obj->Type() == PHONE) {

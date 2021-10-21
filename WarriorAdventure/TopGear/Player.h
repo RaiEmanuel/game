@@ -21,7 +21,8 @@ private:
     float speedX = 300.0f;        // velocidade do carro
     float speedY = 0.0f;          // velocidade do carro
     stringstream text;            // exibição de texto
-    Timer timerDied;
+    
+    
     bool onBlock = false;         //verifica se está num bloco na iteração
     
     

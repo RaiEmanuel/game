@@ -71,8 +71,17 @@ void Boss_fight::Init()
     scene->Add(boss, STATIC);
     audio = new Audio();
     // carregar músicas e efeitos sonoros
+    audio->Add(PULO, "Resources/jump.wav");
+    audio->Add(FIREBALLSOUND, "Resources/fireball.wav");
+    audio->Add(VENTO, "Resources/vento.wav");
+
     audio->Add(WIDE, "Resources/wide_putin.wav");
     audio->Play(WIDE, true);
+    audio->Volume(WIDE, 30);
+
+    audio->Add(FIRE, "Resources/fire.wav");
+    audio->Volume(FIRE, 50);
+    audio->Play(FIRE, true);
 }
 // ------------------------------------------------------------------------------
 void Boss_fight::Update()

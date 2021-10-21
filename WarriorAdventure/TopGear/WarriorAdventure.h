@@ -19,8 +19,9 @@
 #include "Wind.h"
 #include "Boss_fight.h"
 #include "Fase_mestra.h"
+//CORRIGIR ENUMERAÇÃO PARA ASSOCIADAS COM A CLASS enum class x {a,b,c};
 // -----------------------------------------------------------------------------
-enum SoundIds { MUSIC, ENGINE, COLLISION };//continuar
+enum SoundIds { MUSIC, ENGINE, COLLISION, PULO, FIREBALLSOUND, VENTO};//continuar
 enum ObjectTypes {PLAYER, BLOCK, ZOOMBIE, NINJA, AIRPLANE, KUNAI,TIRO_AVIAO, WIND, BOSS, FIREBALL, PHONE};
 // ------------------------------------------------------------------------------
 class WarriorAdventure : public Game

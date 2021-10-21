@@ -123,7 +123,8 @@ void Boss::Update()
             //throwTiro->velX = speedX - 200.0f;
             Bola_de_fogo* fireball = new Bola_de_fogo(X() - float(bossSet->TileWidth())/2.0f, Y(), -150.0f);
             Boss_fight::scene->Add(fireball, STATIC);
-
+            Boss_fight::audio->Play(FIREBALLSOUND, false);
+            Boss_fight::audio->Volume(FIREBALLSOUND, 50);
             temporizador.Reset();
         }
 
