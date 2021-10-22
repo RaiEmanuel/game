@@ -135,7 +135,7 @@ void Boss_fight::Draw()
 {
     // desenha a cena
     scene->Draw();
-    scene->DrawBBox();
+    // scene->DrawBBox();
 }
 // ------------------------------------------------------------------------------
 void Boss_fight::Finalize()

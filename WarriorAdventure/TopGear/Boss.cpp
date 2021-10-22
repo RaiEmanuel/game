@@ -35,7 +35,7 @@ Boss::Boss()
     type = BOSS;
     qual_bloco_esta = 2;
     tiros_tomados = 0;
-    tiros_necessarios_para_morrer = 1;
+    tiros_necessarios_para_morrer = 3;
     atingivel = true;
     temporizador.Start();
 }

@@ -93,7 +93,7 @@ void WarriorAdventure::Update()
 void WarriorAdventure::Draw()
 {
     scene->Draw();
-    scene->DrawBBox();
+    //scene->DrawBBox();
 }
 
 // ------------------------------------------------------------------------------
